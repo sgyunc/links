@@ -118,7 +118,7 @@ window.linksData = [
     "name": "星辰角落",
     "url": "https://ihello.cc",
     "desc": "记录生活点滴",
-    "avatar": "https://favicone.vercel.app/icon?url=https://ihello.cc",
+    "avatar": "https://ihello.cc/",
     "joinYear": 2026
   },
   {
