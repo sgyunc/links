@@ -205,6 +205,33 @@ async function getSiteStatus(url){
     }
 }
 
+/**
+ * 后台更新卡片状态，不阻塞页面渲染
+ */
+async function updateCardStatus(card, url, currentVer){
+    const status = await getSiteStatus(url);
+    if(renderVersion !== currentVer) return;
+
+    const statusTag = card.querySelector('.status-tag');
+    const backTag = card.querySelector('.backlink-tag');
+
+    if(status.alive){
+        statusTag.className = "status-tag status-online";
+        statusTag.innerText = "在线";
+    }else{
+        statusTag.className = "status-tag status-offline";
+        statusTag.innerText = "失联";
+    }
+
+    if(status.backlink){
+        backTag.className = "backlink-tag backlink-yes";
+        backTag.innerText = "已互链";
+    }else{
+        backTag.className = "backlink-tag backlink-no";
+        backTag.innerText = "未互链";
+    }
+}
+
 // 生成年份Tab
 function initTabs(){
     const years = [...new Set(linksData.map(item=>item.joinYear))].sort((a,b)=>b-a);
@@ -230,8 +257,8 @@ function initTabs(){
     })
 }
 
-// 渲染友链（防并发重复）
-async function renderLinks(filterYear="all", keyword=""){
+// 渲染友链：DOM立刻全部生成，检测后台异步跑，不阻塞加载
+function renderLinks(filterYear="all", keyword=""){
     if(isRendering) return;
     isRendering = true;
     const currentVer = ++renderVersion;
@@ -277,28 +304,10 @@ async function renderLinks(filterYear="all", keyword=""){
             imgEl.removeAttribute('data-src');
         }
 
-        const status = await getSiteStatus(item.url);
-        if(currentVer !== renderVersion) continue;
-
-        const statusTag = card.querySelector('.status-tag');
-        const backTag = card.querySelector('.backlink-tag');
-
-        if(status.alive){
-            statusTag.className = "status-tag status-online";
-            statusTag.innerText = "在线";
-        }else{
-            statusTag.className = "status-tag status-offline";
-            statusTag.innerText = "失联";
-        }
-
-        if(status.backlink){
-            backTag.className = "backlink-tag backlink-yes";
-            backTag.innerText = "已互链";
-        }else{
-            backTag.className = "backlink-tag backlink-no";
-            backTag.innerText = "未互链";
-        }
+        // 不await，后台异步更新状态，不阻塞卡片渲染
+        updateCardStatus(card, item.url, currentVer);
     }
+
     isRendering = false;
 }
 
