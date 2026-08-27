@@ -157,7 +157,7 @@ window.linksData = [
     "name": "一望成欢🍀",
     "url": "https://wanqingcheng.cn",
     "desc": "一望成欢🍀记录烟火，珍藏热爱",
-    "avatar": "https://favicone.vercel.app/icon?url=https://wanqingcheng.cn",
+    "avatar": "https://wanqingcheng.cn/tlogo.jpg",
     "joinYear": 2026
   },
   {
