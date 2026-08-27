@@ -15,9 +15,9 @@ const linksData = [
         joinYear: 2026
     },
     {
-        name: "2025站点",
-        url: "https://example-2025.com",
-        desc: "去年加入的站点",
+        name: "FRDLINK",
+        url: "https://blog.frdlink.link",
+        desc: "记录生活事",
         avatar: "https://picsum.photos/id/3/120/120",
         joinYear: 2025
     }
