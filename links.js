@@ -167,7 +167,7 @@ window.linksData = [
     "name": "黄鼠狼的树洞",
     "url": "https://blog.weasel6.cn/",
     "desc": "小黄的博客，记录生活中的美好",
-    "avatar": "https://favicone.vercel.app/icon?url=https://blog.weasel6.cn/",
+    "avatar": "https://files.seeusercontent.com/2026/06/26/Fo0x/LOGO.webp",
     "joinYear": 2026
   },
   {
