@@ -1,3 +1,6 @@
+const linkMeta = {
+    lastEdit: "2026-08-28"
+};
 window.linksData = [
   {
     "name": "杜老师说",
