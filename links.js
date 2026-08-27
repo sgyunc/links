@@ -241,7 +241,7 @@ window.linksData = [
     "name": "懋和道人",
     "url": "https://blog.dao.js.cn/",
     "desc": "李懋和，俗名李栋梁。书法、国画爱好者，互联网安全与前端建设者。",
-    "avatar": "https://favicone.vercel.app/icon?url=https://blog.dao.js.cn/",
+    "avatar": "https://cn.cravatar.com/avatar/37d41e2b550633a30f5d41de61c1aa92?s=400&r=G&d=mp&ver=1754413756",
     "joinYear": 2026
   }
 ];
