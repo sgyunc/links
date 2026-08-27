@@ -56,11 +56,6 @@ header h1{font-size:28px;margin-bottom:12px;}
 .status-checking{background:#f0f0f0;color:#666;}
 .status-online{background:#dcfce7;color:#166534;}
 .status-offline{background:#fee2e2;color:#991b1b;}
-.backlink-tag{
-    font-size:12px;padding:2px 8px;border-radius:4px;margin-left:6px;
-}
-.backlink-yes{background:#dbeafe;color:#1e40af;}
-.backlink-no{background:#fef3c7;color:#92400e;}
 .link-desc{font-size:14px;color:#555;margin-bottom:6px;min-height:40px;}
 .link-url{font-size:13px;color:#4080ff;word-break:break-all;text-decoration:none;display:block;margin-bottom:6px;}
 .year-mark{font-size:12px;color:#888;}
@@ -123,14 +118,11 @@ header h1{font-size:28px;margin-bottom:12px;}
 <script src="./links.js"></script>
 <script>
 // ====================== 请务必修改这里 ======================
-// 把引号内替换成你在 link_checker.php 设置的密钥
 const API_KEY = "Weas2026Nocss@888";
 const PROXY_API = "https://nocss.xyz/link_checker.php?action=check&key="+API_KEY+"&url=";
-// 接收友链申请的管理员邮箱
 const ADMIN_EMAIL = "your@example.com";
 // =======================================================
 
-// 状态缓存 20分钟
 const STATUS_CACHE_TTL = 20 * 60 * 1000;
 const CACHE_KEY = "link_status_cache";
 
@@ -160,7 +152,6 @@ function getObserver(){
     return imgObserver;
 }
 
-// 页面切换
 document.querySelector('.btn-home').addEventListener('click', e=>{
     e.preventDefault();
     homeSection.classList.remove('hide');
@@ -172,7 +163,6 @@ document.querySelector('.btn-apply').addEventListener('click', e=>{
     applySection.classList.remove('hide');
 });
 
-// localStorage缓存读写
 function getStatusCache(){
     const raw = localStorage.getItem(CACHE_KEY);
     if(!raw) return {};
@@ -182,7 +172,6 @@ function setStatusCache(cache){
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
 }
 
-// 请求PHP检测接口
 async function getSiteStatus(url){
     const cache = getStatusCache();
     const now = Date.now();
@@ -194,27 +183,20 @@ async function getSiteStatus(url){
         const data = await res.json();
         cache[url] = {
             alive: data.alive,
-            backlink: data.backlink,
             time: now
         };
         setStatusCache(cache);
         return cache[url];
     }catch(err){
         console.error("检测接口异常", url, err);
-        return { alive:false, backlink:false };
+        return { alive:false };
     }
 }
 
-/**
- * 后台更新卡片状态，不阻塞页面渲染
- */
 async function updateCardStatus(card, url, currentVer){
     const status = await getSiteStatus(url);
     if(renderVersion !== currentVer) return;
-
     const statusTag = card.querySelector('.status-tag');
-    const backTag = card.querySelector('.backlink-tag');
-
     if(status.alive){
         statusTag.className = "status-tag status-online";
         statusTag.innerText = "在线";
@@ -222,17 +204,9 @@ async function updateCardStatus(card, url, currentVer){
         statusTag.className = "status-tag status-offline";
         statusTag.innerText = "失联";
     }
-
-    if(status.backlink){
-        backTag.className = "backlink-tag backlink-yes";
-        backTag.innerText = "已互链";
-    }else{
-        backTag.className = "backlink-tag backlink-no";
-        backTag.innerText = "未互链";
-    }
 }
 
-// 生成年份Tab
+// tab直接显示年份，去掉tab前缀
 function initTabs(){
     const years = [...new Set(linksData.map(item=>item.joinYear))].sort((a,b)=>b-a);
     tabsWrap.innerHTML = '';
@@ -245,7 +219,7 @@ function initTabs(){
         const tab = document.createElement('div');
         tab.className = "tab-item";
         tab.dataset.year = y;
-        tab.innerText = `tab${y}`;
+        tab.innerText = `${y}`;
         tabsWrap.appendChild(tab);
     });
     tabsWrap.querySelectorAll('.tab-item').forEach(tab=>{
@@ -257,7 +231,6 @@ function initTabs(){
     })
 }
 
-// 渲染友链：DOM立刻全部生成，检测后台异步跑，不阻塞加载
 function renderLinks(filterYear="all", keyword=""){
     if(isRendering) return;
     isRendering = true;
@@ -288,7 +261,6 @@ function renderLinks(filterYear="all", keyword=""){
             <img class="avatar" data-src="${escapeHtml(item.avatar)}" alt="${escapeHtml(item.name)}">
             <span class="link-title">${escapeHtml(item.name)}</span>
             <span class="status-tag status-checking">检测中</span>
-            <span class="backlink-tag">--</span>
         </div>
         <div class="link-desc">${escapeHtml(item.desc)}</div>
         <a class="link-url" target="_blank" href="${escapeHtml(item.url)}">${escapeHtml(item.url)}</a>
@@ -303,11 +275,8 @@ function renderLinks(filterYear="all", keyword=""){
             imgEl.src = imgEl.dataset.src;
             imgEl.removeAttribute('data-src');
         }
-
-        // 不await，后台异步更新状态，不阻塞卡片渲染
         updateCardStatus(card, item.url, currentVer);
     }
-
     isRendering = false;
 }
 
@@ -321,13 +290,11 @@ function escapeHtml(str){
         .replace(/'/g,'&#039;');
 }
 
-// 搜索输入
 searchInput.addEventListener('input',()=>{
     const activeTab = tabsWrap.querySelector('.tab-item.active');
     renderLinks(activeTab.dataset.year, searchInput.value);
 })
 
-// 邮件申请按钮
 document.getElementById('sendMailBtn').addEventListener('click',()=>{
     const name = document.getElementById('siteName').value.trim();
     const url = document.getElementById('siteUrl').value.trim();
