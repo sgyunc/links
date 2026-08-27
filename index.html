@@ -252,8 +252,10 @@
 <script src="./links.js"></script>
 <script>
 // ========== 配置项 ==========
-// Vercel部署后的代理接口地址，部署完修改为你的真实地址
-const PROXY_API = "/check.js";
+// Vercel edge接口固定路径
+const PROXY_API = "/api/check";
+// 管理员接收友链申请的邮箱，请改成你的
+const ADMIN_EMAIL = "your@example.com";
 // 状态缓存有效期毫秒，20分钟
 const STATUS_CACHE_TTL = 20 * 60 * 1000;
 // 本地缓存key
@@ -264,6 +266,28 @@ const applySection = document.getElementById('apply-section');
 const tabsWrap = document.getElementById('tabsWrap');
 const linksContainer = document.getElementById('linksContainer');
 const searchInput = document.getElementById('searchInput');
+
+// 防并发渲染锁 + 渲染版本号，解决快速点击tab重复卡片
+let isRendering = false;
+let renderVersion = 0;
+
+// 全局复用懒加载observer
+let imgObserver = null;
+function getObserver(){
+  if(!imgObserver && window.IntersectionObserver){
+    imgObserver = new IntersectionObserver((entries, obs)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+          obs.unobserve(img);
+        }
+      })
+    })
+  }
+  return imgObserver;
+}
 
 // 导航切换
 document.querySelector('.btn-home').addEventListener('click', e=>{
@@ -291,7 +315,7 @@ function setStatusCache(cache){
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
 }
 
-// 获取站点状态，优先缓存，过期走api
+// 获取站点状态，优先缓存，过期走api —— 使用POST
 async function getSiteStatus(url){
     const cache = getStatusCache();
     const now = Date.now();
@@ -299,12 +323,17 @@ async function getSiteStatus(url){
         return cache[url].ok;
     }
     try {
-        const res = await fetch(`${PROXY_API}?url=${encodeURIComponent(url)}`);
+        const res = await fetch(PROXY_API,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({url:url})
+        });
         const data = await res.json();
         cache[url] = { ok:data.ok, time:now };
         setStatusCache(cache);
         return data.ok;
     }catch(err){
+        console.error("检测失败",url,err);
         return false;
     }
 }
@@ -336,6 +365,11 @@ function initTabs(){
 
 // 渲染卡片
 async function renderLinks(filterYear="all", keyword=""){
+    // 如果正在渲染，直接返回，防止多次点击并发
+    if(isRendering) return;
+    isRendering = true;
+    const currentVer = ++renderVersion; // 当前渲染版本
+
     let arr = linksData;
     if(filterYear !== "all"){
         arr = arr.filter(d=>d.joinYear === Number(filterYear));
@@ -345,8 +379,12 @@ async function renderLinks(filterYear="all", keyword=""){
         arr = arr.filter(d=> d.name.toLowerCase().includes(kw) || d.url.toLowerCase().includes(kw) || d.desc.toLowerCase().includes(kw))
     }
     linksContainer.innerHTML = '';
+    const observer = getObserver();
 
     for(const item of arr){
+        // 如果已经发起新渲染，直接放弃旧循环
+        if(currentVer !== renderVersion) break;
+
         const card = document.createElement('div');
         card.className = "link-card";
         card.innerHTML = `
@@ -360,9 +398,19 @@ async function renderLinks(filterYear="all", keyword=""){
         <div class="year-mark">加入：${item.joinYear}</div>
         `;
         linksContainer.appendChild(card);
-        lazyLoadImages();
+        const imgEl = card.querySelector('.avatar[data-src]');
+        if(observer){
+            observer.observe(imgEl);
+        }else{
+            imgEl.src = imgEl.dataset.src;
+            imgEl.removeAttribute('data-src');
+        }
+
         // 异步获取真实状态更新标签
         const ok = await getSiteStatus(item.url);
+        // 关键：如果已经开始新的一轮渲染，旧请求结果丢弃，不修改DOM
+        if(currentVer !== renderVersion) continue;
+
         const tagEl = card.querySelector('.status-tag');
         if(ok){
             tagEl.className = "status-tag status-online";
@@ -372,29 +420,7 @@ async function renderLinks(filterYear="all", keyword=""){
             tagEl.innerText = "失联";
         }
     }
-}
-
-// 图片懒加载
-function lazyLoadImages(){
-    const imgs = document.querySelectorAll('.avatar[data-src]');
-    if(!window.IntersectionObserver){
-        imgs.forEach(img=>{
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-        })
-        return;
-    }
-    const observer = new IntersectionObserver((entries, obs)=>{
-        entries.forEach(entry=>{
-            if(entry.isIntersecting){
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-                obs.unobserve(img);
-            }
-        })
-    })
-    imgs.forEach(img=>observer.observe(img));
+    isRendering = false;
 }
 
 function escapeHtml(str){
