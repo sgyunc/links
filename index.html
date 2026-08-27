@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FRDLINK</title>
+<title>友链导航</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -18,7 +18,10 @@ body{
 }
 .hide{display:none !important;}
 header{margin-bottom:24px;}
-header h1{font-size:28px;margin-bottom:12px;}
+header h1{font-size:28px;margin-bottom:8px;}
+.header-meta{
+    font-size:14px;color:#666;margin-bottom:12px;
+}
 .nav-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
 .nav-bar button{
     padding:8px 16px;border:none;border-radius:8px;
@@ -76,6 +79,10 @@ header h1{font-size:28px;margin-bottom:12px;}
 <body>
 <header>
     <h1>友链导航</h1>
+    <div class="header-meta">
+        <span id="totalCount"></span> &nbsp;|&nbsp;
+        <span id="editTime"></span>
+    </div>
     <div class="nav-bar">
         <button class="btn-home"><i class="fa fa-home"></i> 首页</button>
         <button class="btn-apply"><i class="fa fa-paper-plane"></i> 申请友链</button>
@@ -114,13 +121,12 @@ header h1{font-size:28px;margin-bottom:12px;}
     </div>
 </section>
 
-<!-- 外部友链数据 -->
 <script src="./links.js"></script>
 <script>
 // ====================== 请务必修改这里 ======================
 const API_KEY = "Weas2026Nocss@888";
 const PROXY_API = "https://nocss.xyz/link_checker.php?action=check&key="+API_KEY+"&url=";
-const ADMIN_EMAIL = "3012127809@qq.com";
+const ADMIN_EMAIL = "your@example.com";
 // =======================================================
 
 const STATUS_CACHE_TTL = 20 * 60 * 1000;
@@ -131,10 +137,28 @@ const applySection = document.getElementById('apply-section');
 const tabsWrap = document.getElementById('tabsWrap');
 const linksContainer = document.getElementById('linksContainer');
 const searchInput = document.getElementById('searchInput');
+const totalCountEl = document.getElementById('totalCount');
+const editTimeEl = document.getElementById('editTime');
 
 let isRendering = false;
 let renderVersion = 0;
 let imgObserver = null;
+
+// 格式化日期 YYYY‑MM‑DD → xxxx年x月x日
+function formatDate(str){
+    if(!str) return '';
+    const arr = str.split('-');
+    const y = arr[0], m = arr[1], d = arr[2];
+    return `${y}年${Number(m)}月${Number(d)}日`;
+}
+
+// 填充元信息：总条数、最后编辑时间
+function fillMetaInfo(){
+    totalCountEl.innerText = `共 ${linksData.length} 条友链`;
+    if(linkMeta && linkMeta.lastEdit){
+        editTimeEl.innerText = `最后编辑于 ${formatDate(linkMeta.lastEdit)}`;
+    }
+}
 
 function getObserver(){
     if(!imgObserver && window.IntersectionObserver){
@@ -206,7 +230,6 @@ async function updateCardStatus(card, url, currentVer){
     }
 }
 
-// tab直接显示年份，去掉tab前缀
 function initTabs(){
     const years = [...new Set(linksData.map(item=>item.joinYear))].sort((a,b)=>b-a);
     tabsWrap.innerHTML = '';
@@ -318,6 +341,7 @@ document.getElementById('sendMailBtn').addEventListener('click',()=>{
     window.location.href = mailto;
 })
 
+fillMetaInfo();
 initTabs();
 renderLinks("all");
 </script>
