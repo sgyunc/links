@@ -232,9 +232,9 @@ window.linksData = [
   },
   {
     "name": "灵狐笑话",
-    "url": "shturl.cc/udiSARM",
+    "url": "https://shturl.cc/udiSARM",
     "desc": "小笑话分享",
-    "avatar": "shturl.cc/FWgwQ4onkd6b5kdwwzKgKPeV0GNDky75qfQPOV9iL9zP",
+    "avatar": "https://shturl.cc/FWgwQ4onkd6b5kdwwzKgKPeV0GNDky75qfQPOV9iL9zP",
     "joinYear": 2026
   },
   {
