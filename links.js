@@ -6,7 +6,7 @@ window.linksData = [
     "name": "杜老师说",
     "url": "https://dusays.com",
     "desc": "杜老师说",
-    "avatar": "https://favicone.vercel.app/icon?url=https://dusays.com",
+    "avatar": "https://cdn.dusays.com/favicon.ico",
     "joinYear": 2026
   },
   {
