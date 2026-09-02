@@ -27,7 +27,7 @@ window.linksData = [
     "name": "蛋蛋之家",
     "url": "https://wuqishi.com",
     "desc": "一枚蛋蛋的自留地",
-    "avatar": "https://favicone.vercel.app/icon?url=https://wuqishi.com",
+    "avatar": "https://wuqishi.com/dan.svg",
     "joinYear": 2026
   },
   {
