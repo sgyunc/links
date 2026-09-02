@@ -174,7 +174,7 @@ window.linksData = [
     "name": "雨眠碎碎念",
     "url": "https://blog.yuumii.top",
     "desc": "愿君安康~",
-    "avatar": "https://favicone.vercel.app/icon?url=https://blog.yuumii.top",
+    "avatar": "https://yuumii.top/sys/avatar.ico",
     "joinYear": 2026
   },
   {
