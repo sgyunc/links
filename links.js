@@ -181,7 +181,7 @@ window.linksData = [
     "name": "Mystic Stars",
     "url": "https://www.mysticstars.cn/",
     "desc": "Discover Infinity",
-    "avatar": "https://favicone.vercel.app/icon?url=https://www.mysticstars.cn/",
+    "avatar": "https://www.mysticstars.cn/favicon.svg",
     "joinYear": 2026
   },
   {
