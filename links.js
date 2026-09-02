@@ -17,13 +17,6 @@ window.linksData = [
     "joinYear": 2026
   },
   {
-    "name": "2222",
-    "url": "https://www.baidu.com",
-    "desc": "",
-    "avatar": "https://favicone.vercel.app/icon?url=https://www.baidu.com",
-    "joinYear": 2026
-  },
-  {
     "name": "好站网",
     "url": "https://haozhan.wang/",
     "desc": "发现好站，展示好站",
@@ -62,7 +55,7 @@ window.linksData = [
     "name": "FRDLINK留言板",
     "url": "https://gb.frdlink.link",
     "desc": "说你想说的话，做你想做的事。",
-    "avatar": "https://favicone.vercel.app/icon?url=https://gb.frdlink.link",
+    "avatar": "https://frdlink.link",
     "joinYear": 2026
   },
   {
@@ -83,7 +76,7 @@ window.linksData = [
     "name": "FRDLINK博客",
     "url": "https://blog.frdlink.link/",
     "desc": "一个简单的个人博客",
-    "avatar": "https://favicone.vercel.app/icon?url=https://blog.frdlink.link/",
+    "avatar": "https://blog.frdlink.link/favicon.ico",
     "joinYear": 2026
   },
   {
