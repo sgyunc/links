@@ -209,7 +209,7 @@ window.linksData = [
     "name": "小景",
     "url": "https://jingyuan-zheng.github.io/zh/",
     "desc": "随心分享有趣的技术、开源项目与生活记录。",
-    "avatar": "https://favicone.vercel.app/icon?url=https://jingyuan-zheng.github.io/zh/",
+    "avatar": "https://jingyuan-zheng.github.io/img/avatar.png",
     "joinYear": 2026
   },
   {
