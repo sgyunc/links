@@ -153,7 +153,7 @@ window.linksData = [
     "name": "清雨博客",
     "url": "https://prain.cn/",
     "desc": "一个极为干净的开源PHP轻博客程序，比一张图片还小，不到150K，不需要数据库，无任何依赖，冰清玉洁，纤尘不染",
-    "avatar": "https://favicone.vercel.app/icon?url=https://prain.cn/",
+    "avatar": "https://prain.cn/lib/style/logo.svg",
     "joinYear": 2026
   },
   {
