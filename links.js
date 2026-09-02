@@ -90,7 +90,7 @@ window.linksData = [
     "name": "浮生事",
     "url": "http://etom.top",
     "desc": "无根之言，只当笑谈。",
-    "avatar": "https://favicone.vercel.app/icon?url=http://etom.top",
+    "avatar": "https://etom.top/usr/themes/xaink/assets/images/logo.png",
     "joinYear": 2026
   },
   {
