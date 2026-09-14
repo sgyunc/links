@@ -118,7 +118,7 @@ window.linksData = [
     "name": "Fiee's BLog",
     "url": "https://www.aifiee.cn/",
     "desc": "长风破浪会有时，直挂云帆济沧海",
-    "avatar": "https://favicone.vercel.app/icon?url=https://www.aifiee.cn/",
+    "avatar": "https://aifiee-blog.oss-cn-beijing.aliyuncs.com/blog/images/1783698955741_1514.png",
     "joinYear": 2026
   },
   {
