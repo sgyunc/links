@@ -48,7 +48,7 @@ window.linksData = [
     "name": "姓王者",
     "url": "https://xingwangzhe.fun/",
     "desc": "姓王者的博客",
-    "avatar": "https://favicone.vercel.app/icon?url=https://xingwangzhe.fun/",
+    "avatar": "https://xingwangzhe.fun/avatar.webp",
     "joinYear": 2026
   },
   {
