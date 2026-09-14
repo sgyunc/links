@@ -13,7 +13,7 @@ window.linksData = [
     "name": "Heo",
     "url": "https://blog.zhheo.com/",
     "desc": "设计师",
-    "avatar": "https://favicone.vercel.app/icon?url=https://blog.zhheo.com/",
+    "avatar": "https://zhheo.com/img/icon.webp",
     "joinYear": 2026
   },
   {
