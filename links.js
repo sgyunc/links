@@ -41,7 +41,7 @@ window.linksData = [
     "name": "小王子",
     "url": "https://www.wanghao.me/",
     "desc": "聆听小王子，守望成长，静待花开。",
-    "avatar": "https://favicone.vercel.app/icon?url=https://www.wanghao.me/",
+    "avatar": "https://zhheo.com/img/icon.webp",
     "joinYear": 2026
   },
   {
