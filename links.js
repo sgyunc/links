@@ -34,7 +34,7 @@ window.linksData = [
     "name": "秋記Autumn",
     "url": "https://www.zhyok.cn/",
     "desc": "80后个人博客、网络日杂、生活记录。",
-    "avatar": "https://favicone.vercel.app/icon?url=https://www.zhyok.cn/",
+    "avatar": "https://cache.miancp.com/data/www.zhyok.cn/logo.png",
     "joinYear": 2026
   },
   {
