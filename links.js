@@ -62,7 +62,7 @@ window.linksData = [
     "name": "益友网站",
     "url": "https://blog.yiyou.bj.cn",
     "desc": "记生活点滴，留岁月温柔。",
-    "avatar": "https://favicone.vercel.app/icon?url=https://blog.yiyou.bj.cn",
+    "avatar": "https://www.yiyou.bj.cn/logo/youlogo.png",
     "joinYear": 2026
   },
   {
