@@ -198,7 +198,7 @@ header h1{font-size:28px;margin-bottom:8px;}
 // 请务必改为服务端代理转发（前端只调用不含 key 的接口）。
 const API_KEY = "Weas2026Nocss@888";
 const PROXY_API = "https://nocss.xyz/link_checker.php?action=check&key="+API_KEY+"&url=";
-const ADMIN_EMAIL = "your@example.com"; // TODO: 上线前替换为真实收件邮箱，否则申请邮件无法送达
+const ADMIN_EMAIL = "3012127809@qq.com";
 // 申请提交接口（可选）：填入 Formspree 表单地址（如 https://formspree.io/f/xxxx）或自建后端接口后，
 // 申请将直接 POST（JSON）到该地址，不再依赖访客的邮件客户端；留空则回退为 mailto 方式。
 const SUBMIT_URL = "";
@@ -433,9 +433,9 @@ function attachAvatarFallback(imgEl){
     };
 }
 
-// 复制友链代码（HTML 片段，供对方站点直接使用）
+// 复制友链代码（Markdown 格式，供对方站点直接使用）
 function buildLinkCode(item){
-    return `<a href="${item.url}" target="_blank" rel="noopener" title="${item.name}"><img src="${item.avatar}" alt="${item.name}" style="width:32px;height:32px;vertical-align:middle;border-radius:6px" /> ${item.name}</a>`;
+    return `[${item.name}](${item.url})`;
 }
 function copyLink(item, btn){
     const text = buildLinkCode(item);
