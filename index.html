@@ -3,50 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="FRDLINK - 个人博客友链聚合页，收录优质独立博客与网站，支持在线状态检测。">
+<meta property="og:title" content="FRDLINK">
+<meta property="og:description" content="FRDLINK - 个人博客友链聚合页，收录优质独立博客与网站。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://frdlink.link/">
+<meta property="og:image" content="https://frdlink.link/favicon.ico">
+<meta name="theme-color" content="#4080ff">
 <title>FRDLINK</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
 <style>
+:root{
+    --bg:#f7f8fa;
+    --text:#222;
+    --card-bg:#fff;
+    --border:#e5e7eb;
+    --tab-bg:#e9edf4;
+    --tab-text:#444;
+    --muted:#666;
+    --muted2:#555;
+    --muted3:#888;
+    --accent:#4080ff;
+    --accent-hover:#2968e0;
+    --input-bg:#fff;
+    --status-checking-bg:#f0f0f0; --status-checking-text:#666;
+    --status-online-bg:#dcfce7;  --status-online-text:#166534;
+    --status-offline-bg:#fee2e2; --status-offline-text:#991b1b;
+    --status-error-bg:#fef3c7;   --status-error-text:#92400e;
+    --shadow:0 1px 2px rgba(0,0,0,.04);
+}
+html[data-theme="dark"]{
+    --bg:#0f1217;
+    --text:#e6e8eb;
+    --card-bg:#181c23;
+    --border:#2a2f38;
+    --tab-bg:#262c36;
+    --tab-text:#c6ccd6;
+    --muted:#9aa3b2;
+    --muted2:#b3bac6;
+    --muted3:#8b93a1;
+    --accent:#5b8cff;
+    --accent-hover:#7aa2ff;
+    --input-bg:#12151b;
+    --status-checking-bg:#2a2f38; --status-checking-text:#9aa3b2;
+    --status-online-bg:#0e2a1c;   --status-online-text:#5fd68c;
+    --status-offline-bg:#331719;  --status-offline-text:#f29696;
+    --status-error-bg:#33290f;    --status-error-text:#f0b94e;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{
     font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-    background:#f7f8fa;
-    color:#222;
+    background:var(--bg);
+    color:var(--text);
     line-height:1.6;
     padding:20px;
     max-width:1200px;
     margin:0 auto;
+    transition:background .2s,color .2s;
 }
 .hide{display:none !important;}
 header{margin-bottom:24px;}
 header h1{font-size:28px;margin-bottom:8px;}
 .header-meta{
-    font-size:14px;color:#666;margin-bottom:12px;
+    font-size:14px;color:var(--muted);margin-bottom:12px;
 }
-.nav-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.nav-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
 .nav-bar button{
     padding:8px 16px;border:none;border-radius:8px;
-    background:#4080ff;color:#fff;cursor:pointer;font-size:15px;
+    background:var(--accent);color:#fff;cursor:pointer;font-size:15px;
 }
-.nav-bar button:hover{background:#2968e0;}
+.nav-bar button:hover{background:var(--accent-hover);}
+#themeBtn{width:40px;padding:8px 0;}
 #searchInput{
-    width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:15px;margin-bottom:16px;
+    width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;
+    background:var(--input-bg);color:var(--text);
 }
-#tabsWrap{
-    display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;
+#tabsWrap,#catTabsWrap{
+    display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;
 }
 .tab-item{
-    padding:7px 14px;background:#e9edf4;border-radius:6px;cursor:pointer;font-size:14px;
-    border:none;font-family:inherit;
+    padding:7px 14px;background:var(--tab-bg);border-radius:6px;cursor:pointer;font-size:14px;
+    border:none;font-family:inherit;color:var(--tab-text);
 }
-.tab-item:focus-visible{outline:2px solid #4080ff;outline-offset:2px;}
-.tab-item.active{background:#4080ff;color:#fff;}
+.tab-item:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.tab-item.active{background:var(--accent);color:#fff;}
 #linksContainer{
     display:grid;
     grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
     gap:16px;
 }
 .link-card{
-    background:#fff;padding:16px;border-radius:10px;border:1px solid #e5e7eb;
+    background:var(--card-bg);padding:16px;border-radius:10px;border:1px solid var(--border);
+    box-shadow:var(--shadow);
 }
 .card-header{
     display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;
@@ -58,25 +107,39 @@ header h1{font-size:28px;margin-bottom:8px;}
 .status-tag{
     font-size:12px;padding:2px 8px;border-radius:4px;margin-left:auto;
 }
-.status-checking{background:#f0f0f0;color:#666;}
-.status-online{background:#dcfce7;color:#166534;}
-.status-offline{background:#fee2e2;color:#991b1b;}
-.status-error{background:#fef3c7;color:#92400e;}
-.link-desc{font-size:14px;color:#555;margin-bottom:6px;min-height:40px;}
-.link-url{font-size:13px;color:#4080ff;word-break:break-all;text-decoration:none;display:block;margin-bottom:6px;}
-.year-mark{font-size:12px;color:#888;}
-
+.status-checking{background:var(--status-checking-bg);color:var(--status-checking-text);}
+.status-online{background:var(--status-online-bg);color:var(--status-online-text);}
+.status-offline{background:var(--status-offline-bg);color:var(--status-offline-text);}
+.status-error{background:var(--status-error-bg);color:var(--status-error-text);}
+.link-desc{font-size:14px;color:var(--muted2);margin-bottom:6px;min-height:40px;}
+.link-url{font-size:13px;color:var(--accent);word-break:break-all;text-decoration:none;display:block;margin-bottom:6px;}
+.card-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px;}
+.year-mark{font-size:12px;color:var(--muted3);}
+.status-detail{font-size:11px;color:var(--muted3);margin-top:4px;}
+.copy-btn{
+    margin-left:auto;padding:4px 12px;font-size:12px;border:1px solid var(--border);
+    border-radius:6px;background:transparent;color:var(--muted);cursor:pointer;font-family:inherit;
+}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+.copy-btn.copied{color:#fff;background:var(--status-online-text);border-color:var(--status-online-text);}
 .apply-box{
-    background:#fff;padding:20px;border-radius:10px;border:1px solid #e5e7eb;max-width:600px;
+    background:var(--card-bg);padding:20px;border-radius:10px;border:1px solid var(--border);max-width:600px;
 }
 .apply-box .form-item{margin-bottom:14px;}
 .apply-box label{display:block;margin-bottom:4px;font-size:14px;}
 .apply-box input,.apply-box textarea{
-    width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:14px;
+    width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-size:14px;
+    background:var(--input-bg);color:var(--text);
 }
 #sendMailBtn{
-    padding:10px 20px;background:#4080ff;color:#fff;border:none;border-radius:6px;cursor:pointer;
+    padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;
 }
+#sendMailBtn:hover{background:var(--accent-hover);}
+#sendMailBtn:disabled{opacity:.6;cursor:not-allowed;}
+.form-msg{margin-top:10px;font-size:14px;display:none;}
+.form-msg.ok{color:var(--status-online-text);}
+.form-msg.err{color:var(--status-offline-text);}
+.empty-tip{grid-column:1/-1;color:var(--muted3);text-align:center;padding:40px 0;}
 </style>
 </head>
 <body>
@@ -89,12 +152,14 @@ header h1{font-size:28px;margin-bottom:8px;}
     <div class="nav-bar">
         <button class="btn-home"><i class="fa fa-home"></i> 首页</button>
         <button class="btn-apply"><i class="fa fa-paper-plane"></i> 申请友链</button>
+        <button id="themeBtn" title="切换明暗模式"><i class="fa fa-moon"></i></button>
     </div>
 </header>
 
 <section id="home-section">
     <input id="searchInput" placeholder="搜索站点名称、网址、简介...">
-    <div id="tabsWrap"></div>
+    <div id="catTabsWrap" aria-label="按分类筛选"></div>
+    <div id="tabsWrap" aria-label="按年份筛选"></div>
     <div id="linksContainer"></div>
 </section>
 
@@ -121,6 +186,7 @@ header h1{font-size:28px;margin-bottom:8px;}
             <input id="contactMail" placeholder="用于接收回复">
         </div>
         <button id="sendMailBtn">一键发送邮件申请</button>
+        <div id="formMsg" class="form-msg"></div>
     </div>
 </section>
 
@@ -133,6 +199,9 @@ header h1{font-size:28px;margin-bottom:8px;}
 const API_KEY = "Weas2026Nocss@888";
 const PROXY_API = "https://nocss.xyz/link_checker.php?action=check&key="+API_KEY+"&url=";
 const ADMIN_EMAIL = "your@example.com"; // TODO: 上线前替换为真实收件邮箱，否则申请邮件无法送达
+// 申请提交接口（可选）：填入 Formspree 表单地址（如 https://formspree.io/f/xxxx）或自建后端接口后，
+// 申请将直接 POST（JSON）到该地址，不再依赖访客的邮件客户端；留空则回退为 mailto 方式。
+const SUBMIT_URL = "";
 // ================================================================
 
 const STATUS_CACHE_TTL = 20 * 60 * 1000;
@@ -142,6 +211,7 @@ const FALLBACK_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000
 
 const homeSection = document.getElementById('home-section');
 const applySection = document.getElementById('apply-section');
+const catTabsWrap = document.getElementById('catTabsWrap');
 const tabsWrap = document.getElementById('tabsWrap');
 const linksContainer = document.getElementById('linksContainer');
 const searchInput = document.getElementById('searchInput');
@@ -150,6 +220,8 @@ const editTimeEl = document.getElementById('editTime');
 
 let renderVersion = 0;
 let imgObserver = null;
+// 当前筛选状态：分类 / 年份 / 关键词
+const filterState = { cat: 'all', year: 'all', keyword: '' };
 
 // 格式化日期 YYYY‑MM‑DD → xxxx年x月x日
 function formatDate(str){
@@ -173,10 +245,7 @@ function getObserver(){
             entries.forEach(entry=>{
                 if(entry.isIntersecting){
                     const img = entry.target;
-                    img.onerror = ()=>{
-                        img.onerror = null;
-                        img.src = FALLBACK_AVATAR;
-                    };
+                    attachAvatarFallback(img);
                     img.src = img.dataset.src;
                     img.removeAttribute('data-src');
                     obs.unobserve(img);
@@ -198,6 +267,26 @@ document.querySelector('.btn-apply').addEventListener('click', e=>{
     applySection.classList.remove('hide');
 });
 
+// ====================== 明暗模式 ======================
+const themeBtn = document.getElementById('themeBtn');
+const themeIcon = themeBtn.querySelector('i');
+function applyTheme(dark){
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    themeIcon.className = dark ? 'fa fa-sun' : 'fa fa-moon';
+}
+function initTheme(){
+    const saved = localStorage.getItem('link_theme');
+    const dark = saved ? saved === 'dark'
+        : !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    applyTheme(dark);
+}
+themeBtn.addEventListener('click', ()=>{
+    const dark = document.documentElement.getAttribute('data-theme') !== 'dark';
+    applyTheme(dark);
+    localStorage.setItem('link_theme', dark ? 'dark' : 'light');
+});
+initTheme();
+
 function getStatusCache(){
     const raw = localStorage.getItem(CACHE_KEY);
     if(!raw) return {};
@@ -213,23 +302,29 @@ async function getSiteStatus(url){
     if(cache[url] && (now - cache[url].time) < STATUS_CACHE_TTL){
         return cache[url];
     }
+    const started = performance.now();
     const controller = new AbortController();
     const timer = setTimeout(()=>controller.abort(), 10000);
+    let ms = null;
     try {
         const res = await fetch(PROXY_API + encodeURIComponent(url), { signal: controller.signal });
         if(!res.ok) throw new Error("HTTP " + res.status);
         const data = await res.json();
+        ms = Math.round(performance.now() - started);
         cache[url] = {
             alive: data.alive === true,
             error: false,
+            ms: ms,
             time: now
         };
     }catch(err){
         console.error("检测接口异常", url, err);
+        ms = Math.round(performance.now() - started);
         // 检测失败也写缓存（同样 TTL），避免刷新后反复请求
         cache[url] = {
             alive: false,
             error: true,
+            ms: ms,
             time: now
         };
     }finally{
@@ -253,18 +348,23 @@ async function updateCardStatus(card, url, currentVer){
         statusTag.className = "status-tag status-offline";
         statusTag.innerText = "失联";
     }
+    const detail = card.querySelector('.status-detail');
+    if(detail){
+        const t = new Date(status.time);
+        const hm = `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
+        detail.innerText = (status.ms != null) ? `最近检测 ${hm} · ${status.ms}ms` : `最近检测 ${hm}`;
+    }
 }
 
-function initTabs(){
-    const years = [...new Set(linksData.map(item=>item.joinYear))].sort((a,b)=>b-a);
-    tabsWrap.innerHTML = '';
-    tabsWrap.setAttribute('role','tablist');
+function initTabs(container, options, stateKey){
+    container.innerHTML = '';
+    container.setAttribute('role','tablist');
 
-    function makeTab(year, label, active){
+    function makeTab(value, label, active){
         const tab = document.createElement('button');
         tab.type = 'button';
         tab.className = "tab-item" + (active ? " active" : "");
-        tab.dataset.year = year;
+        tab.dataset.value = value;
         tab.setAttribute('role','tab');
         tab.setAttribute('aria-selected', active ? 'true' : 'false');
         tab.tabIndex = active ? 0 : -1;
@@ -272,11 +372,12 @@ function initTabs(){
         return tab;
     }
 
-    const tabs = [makeTab("all", "全部", true)];
-    years.forEach(y=>{
-        tabs.push(makeTab(String(y), `${y}`, false));
+    const tabs = options.map((opt, idx)=>{
+        const active = filterState[stateKey] === opt.value ||
+                       (filterState[stateKey] === 'all' && idx === 0);
+        return makeTab(opt.value, opt.label, active);
     });
-    tabs.forEach(t=>tabsWrap.appendChild(t));
+    tabs.forEach(t=>container.appendChild(t));
 
     function selectTab(tab){
         tabs.forEach(t=>{
@@ -287,7 +388,8 @@ function initTabs(){
         tab.classList.add('active');
         tab.setAttribute('aria-selected','true');
         tab.tabIndex = 0;
-        renderLinks(tab.dataset.year);
+        filterState[stateKey] = tab.dataset.value;
+        renderLinks();
     }
 
     tabs.forEach((tab, i)=>{
@@ -308,15 +410,71 @@ function initTabs(){
     });
 }
 
-function renderLinks(filterYear="all", keyword=""){
+function initAllTabs(){
+    const cats = [...new Set(linksData.map(d=>d.category))];
+    initTabs(catTabsWrap, [{value:'all',label:'全部'}].concat(cats.map(c=>({value:c,label:c}))), 'cat');
+    const years = [...new Set(linksData.map(d=>d.joinYear))].sort((a,b)=>b-a);
+    initTabs(tabsWrap, [{value:'all',label:'全部'}].concat(years.map(y=>({value:String(y),label:`${y}`}))), 'year');
+}
+
+// 头像加载失败 → 先尝试站点根路径 /favicon.ico，再落到占位图
+function attachAvatarFallback(imgEl){
+    imgEl.onerror = ()=>{
+        imgEl.onerror = null;
+        const site = imgEl.dataset.site;
+        if(site){
+            try{
+                imgEl.src = new URL(site).origin + '/favicon.ico';
+                imgEl.onerror = ()=>{ imgEl.onerror = null; imgEl.src = FALLBACK_AVATAR; };
+                return;
+            }catch(e){}
+        }
+        imgEl.src = FALLBACK_AVATAR;
+    };
+}
+
+// 复制友链代码（HTML 片段，供对方站点直接使用）
+function buildLinkCode(item){
+    return `<a href="${item.url}" target="_blank" rel="noopener" title="${item.name}"><img src="${item.avatar}" alt="${item.name}" style="width:32px;height:32px;vertical-align:middle;border-radius:6px" /> ${item.name}</a>`;
+}
+function copyLink(item, btn){
+    const text = buildLinkCode(item);
+    const done = ()=>{
+        const old = btn.innerText;
+        btn.innerText = "已复制";
+        btn.classList.add('copied');
+        setTimeout(()=>{ btn.innerText = old; btn.classList.remove('copied'); }, 1500);
+    };
+    const fallback = ()=>{
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try{ document.execCommand('copy'); done(); }
+        catch(e){ alert("复制失败，请手动复制"); }
+        document.body.removeChild(ta);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+    }else{
+        fallback();
+    }
+}
+
+function renderLinks(){
     const currentVer = ++renderVersion;
 
     let arr = linksData;
-    if(filterYear !== "all"){
-        arr = arr.filter(d=>d.joinYear === Number(filterYear));
+    if(filterState.cat !== 'all'){
+        arr = arr.filter(d=>d.category === filterState.cat);
     }
-    if(keyword.trim()){
-        const kw = keyword.toLowerCase();
+    if(filterState.year !== 'all'){
+        arr = arr.filter(d=>d.joinYear === Number(filterState.year));
+    }
+    if(filterState.keyword.trim()){
+        const kw = filterState.keyword.toLowerCase();
         arr = arr.filter(d=>
             d.name.toLowerCase().includes(kw) ||
             d.url.toLowerCase().includes(kw) ||
@@ -324,6 +482,15 @@ function renderLinks(filterYear="all", keyword=""){
         )
     }
     linksContainer.innerHTML = '';
+
+    if(arr.length === 0){
+        const tip = document.createElement('div');
+        tip.className = "empty-tip";
+        tip.innerText = "没有找到匹配的友链";
+        linksContainer.appendChild(tip);
+        return;
+    }
+
     const observer = getObserver();
 
     for(const item of arr){
@@ -331,22 +498,23 @@ function renderLinks(filterYear="all", keyword=""){
         card.className = "link-card";
         card.innerHTML = `
         <div class="card-header">
-            <img class="avatar" data-src="${escapeHtml(item.avatar)}" alt="${escapeHtml(item.name)}">
+            <img class="avatar" data-src="${escapeHtml(item.avatar)}" alt="${escapeHtml(item.name)}" data-site="${escapeHtml(item.url)}">
             <span class="link-title">${escapeHtml(item.name)}</span>
             <span class="status-tag status-checking">检测中</span>
         </div>
         <div class="link-desc">${escapeHtml(item.desc)}</div>
         <a class="link-url" target="_blank" rel="noopener noreferrer" href="${escapeHtml(item.url)}">${escapeHtml(item.url)}</a>
-        <div class="year-mark">加入：${item.joinYear}</div>
+        <div class="card-footer">
+            <span class="year-mark">加入：${item.joinYear} · ${escapeHtml(item.category)}</span>
+            <button type="button" class="copy-btn">复制友链</button>
+        </div>
+        <div class="status-detail"></div>
         `;
         linksContainer.appendChild(card);
 
         const imgEl = card.querySelector('.avatar[data-src]');
         const loadAvatar = ()=>{
-            imgEl.onerror = ()=>{
-                imgEl.onerror = null;
-                imgEl.src = FALLBACK_AVATAR;
-            };
+            attachAvatarFallback(imgEl);
             imgEl.src = imgEl.dataset.src;
             imgEl.removeAttribute('data-src');
         };
@@ -355,6 +523,10 @@ function renderLinks(filterYear="all", keyword=""){
         }else{
             loadAvatar();
         }
+
+        const copyBtn = card.querySelector('.copy-btn');
+        copyBtn.addEventListener('click', ()=>copyLink(item, copyBtn));
+
         updateCardStatus(card, item.url, currentVer);
     }
 }
@@ -373,17 +545,24 @@ let searchTimer = null;
 searchInput.addEventListener('input',()=>{
     clearTimeout(searchTimer);
     searchTimer = setTimeout(()=>{
-        const activeTab = tabsWrap.querySelector('.tab-item.active');
-        renderLinks(activeTab.dataset.year, searchInput.value);
+        filterState.keyword = searchInput.value;
+        renderLinks();
     }, 250);
 })
 
-document.getElementById('sendMailBtn').addEventListener('click',()=>{
+// 归一化网址用于查重：去协议、去末尾斜杠、小写
+function normalizeUrl(u){
+    return String(u).replace(/\/+$/,'').replace(/^https?:\/\//i,'').toLowerCase();
+}
+
+document.getElementById('sendMailBtn').addEventListener('click', async ()=>{
     const name = document.getElementById('siteName').value.trim();
     const url = document.getElementById('siteUrl').value.trim();
     const desc = document.getElementById('siteDesc').value.trim();
     const avatar = document.getElementById('siteAvatar').value.trim();
     const contact = document.getElementById('contactMail').value.trim();
+    const btn = document.getElementById('sendMailBtn');
+    const msg = document.getElementById('formMsg');
     if(!name || !url){
         alert("请填写站点名称和网站地址");
         return;
@@ -396,6 +575,46 @@ document.getElementById('sendMailBtn').addEventListener('click',()=>{
         alert("联系邮箱格式不正确");
         return;
     }
+
+    // 查重：已在友链列表中的网站不允许重复申请
+    const dup = linksData.find(d=>normalizeUrl(d.url) === normalizeUrl(url));
+    if(dup){
+        alert(`该网站已在友链列表中（${dup.name}）`);
+        return;
+    }
+
+    // 已配置提交接口：POST（JSON）到后端 / Formspree
+    if(SUBMIT_URL){
+        btn.disabled = true;
+        msg.className = "form-msg";
+        msg.style.display = "none";
+        try{
+            const res = await fetch(SUBMIT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                body: JSON.stringify({ name, url, desc, avatar, contact })
+            });
+            if(res.ok){
+                msg.className = "form-msg ok";
+                msg.innerText = "申请已提交，感谢！站长审核后会与你联系。";
+                ['siteName','siteUrl','siteDesc','siteAvatar','contactMail'].forEach(id=>{
+                    document.getElementById(id).value = '';
+                });
+            }else{
+                msg.className = "form-msg err";
+                msg.innerText = "提交失败（HTTP " + res.status + "），请稍后重试或改用邮件联系。";
+            }
+        }catch(err){
+            console.error("申请提交异常", err);
+            msg.className = "form-msg err";
+            msg.innerText = "提交失败，请检查网络后重试，或改用邮件联系。";
+        }
+        msg.style.display = "block";
+        btn.disabled = false;
+        return;
+    }
+
+    // 未配置接口：回退 mailto 邮件客户端方式
     if(ADMIN_EMAIL === "your@example.com"){
         alert("管理员邮箱尚未配置，请修改 index.html 中的 ADMIN_EMAIL 后使用该功能");
         return;
@@ -414,8 +633,8 @@ document.getElementById('sendMailBtn').addEventListener('click',()=>{
 })
 
 fillMetaInfo();
-initTabs();
-renderLinks("all");
+initAllTabs();
+renderLinks();
 </script>
 </body>
 </html>

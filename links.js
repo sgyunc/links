@@ -7,6 +7,7 @@ window.linksData = [
     "url": "https://dusays.com",
     "desc": "杜老师说",
     "avatar": "https://cdn.dusays.com/favicon.ico",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -14,6 +15,7 @@ window.linksData = [
     "url": "https://blog.zhheo.com/",
     "desc": "设计师",
     "avatar": "https://zhheo.com/img/icon.webp",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -21,6 +23,7 @@ window.linksData = [
     "url": "https://haozhan.wang/",
     "desc": "发现好站，展示好站",
     "avatar": "https://favicone.vercel.app/icon?url=https://haozhan.wang/",
+    "category": "导航",
     "joinYear": 2026
   },
   {
@@ -28,6 +31,7 @@ window.linksData = [
     "url": "https://wuqishi.com",
     "desc": "一枚蛋蛋的自留地",
     "avatar": "https://wuqishi.com/dan.svg",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -35,6 +39,7 @@ window.linksData = [
     "url": "https://www.zhyok.cn/",
     "desc": "80后个人博客、网络日杂、生活记录。",
     "avatar": "https://cache.miancp.com/data/www.zhyok.cn/logo.png",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -42,6 +47,7 @@ window.linksData = [
     "url": "https://www.wanghao.me/",
     "desc": "聆听小王子，守望成长，静待花开。",
     "avatar": "https://favicone.vercel.app/icon?url=https://www.wanghao.me/",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -49,6 +55,7 @@ window.linksData = [
     "url": "https://xingwangzhe.fun/",
     "desc": "姓王者的博客",
     "avatar": "https://xingwangzhe.fun/avatar.webp",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -56,6 +63,7 @@ window.linksData = [
     "url": "https://gb.frdlink.link",
     "desc": "说你想说的话，做你想做的事。",
     "avatar": "https://favicone.vercel.app/icon?url=https://frdlink.link",
+    "category": "其他",
     "joinYear": 2026
   },
   {
@@ -63,6 +71,7 @@ window.linksData = [
     "url": "https://blog.yiyou.bj.cn",
     "desc": "记生活点滴，留岁月温柔。",
     "avatar": "https://www.yiyou.bj.cn/logo/youlogo.png",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -70,6 +79,7 @@ window.linksData = [
     "url": "https://wang618.cn/",
     "desc": "爱生活、爱摸鱼",
     "avatar": "https://favicone.vercel.app/icon?url=https://wang618.cn/",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -77,6 +87,7 @@ window.linksData = [
     "url": "https://blog.frdlink.link/",
     "desc": "一个简单的个人博客",
     "avatar": "https://blog.frdlink.link/favicon.ico",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -84,6 +95,7 @@ window.linksData = [
     "url": "https://etom.top",
     "desc": "无根之言，只当笑谈。",
     "avatar": "https://etom.top/usr/themes/xaink/assets/images/logo.png",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -91,6 +103,7 @@ window.linksData = [
     "url": "https://www.pipishe.com",
     "desc": "皮一下～很开心！",
     "avatar": "https://favicone.vercel.app/icon?url=https://www.pipishe.com",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -98,6 +111,7 @@ window.linksData = [
     "url": "https://www.dalao.net",
     "desc": "大佬论坛",
     "avatar": "https://favicone.vercel.app/icon?url=https://www.dalao.net",
+    "category": "论坛",
     "joinYear": 2026
   },
   {
@@ -105,6 +119,7 @@ window.linksData = [
     "url": "https://www.ruanyifeng.com/blog/",
     "desc": "阮一峰的网络日志",
     "avatar": "https://favicone.vercel.app/icon?url=https://www.ruanyifeng.com/blog/",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -112,6 +127,7 @@ window.linksData = [
     "url": "https://ihello.cc",
     "desc": "记录生活点滴",
     "avatar": "https://ihello.cc/favicon.ico",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -119,6 +135,7 @@ window.linksData = [
     "url": "https://www.aifiee.cn/",
     "desc": "长风破浪会有时，直挂云帆济沧海",
     "avatar": "https://aifiee-blog.oss-cn-beijing.aliyuncs.com/blog/images/1783698955741_1514.png",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -126,6 +143,7 @@ window.linksData = [
     "url": "https://3gw.cn/a.php?o=ZZZ",
     "desc": "3G导航",
     "avatar": "https://favicone.vercel.app/icon?url=https://3gw.cn/a.php?o=ZZZ",
+    "category": "导航",
     "joinYear": 2026
   },
   {
@@ -133,6 +151,7 @@ window.linksData = [
     "url": "https://www.188dh.cn/",
     "desc": "188收录网",
     "avatar": "https://favicone.vercel.app/icon?url=https://www.188dh.cn/",
+    "category": "导航",
     "joinYear": 2026
   },
   {
@@ -140,6 +159,7 @@ window.linksData = [
     "url": "https://prain.cn/",
     "desc": "一个极为干净的开源PHP轻博客程序，比一张图片还小，不到150K，不需要数据库，无任何依赖，冰清玉洁，纤尘不染",
     "avatar": "https://prain.cn/lib/style/logo.svg",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -147,6 +167,7 @@ window.linksData = [
     "url": "https://wanqingcheng.cn",
     "desc": "一望成欢🍀记录烟火，珍藏热爱",
     "avatar": "https://wanqingcheng.cn/tlogo.jpg",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -154,6 +175,7 @@ window.linksData = [
     "url": "https://blog.weasel6.cn/",
     "desc": "小黄的博客，记录生活中的美好",
     "avatar": "https://files.seeusercontent.com/2026/06/26/Fo0x/LOGO.webp",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -161,6 +183,7 @@ window.linksData = [
     "url": "https://blog.yuumii.top",
     "desc": "愿君安康~",
     "avatar": "https://yuumii.top/sys/avatar.ico",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -168,6 +191,7 @@ window.linksData = [
     "url": "https://www.mysticstars.cn/",
     "desc": "Discover Infinity",
     "avatar": "https://www.mysticstars.cn/favicon.svg",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -175,6 +199,7 @@ window.linksData = [
     "url": "https://blogroll.online/",
     "desc": "又一个博客聚合站",
     "avatar": "https://favicone.vercel.app/icon?url=https://blogroll.online/",
+    "category": "导航",
     "joinYear": 2026
   },
   {
@@ -182,6 +207,7 @@ window.linksData = [
     "url": "http://www.heatsystem.cn/",
     "desc": "友情网址导航",
     "avatar": "https://favicone.vercel.app/icon?url=http://www.heatsystem.cn/",
+    "category": "导航",
     "joinYear": 2026
   },
   {
@@ -189,6 +215,7 @@ window.linksData = [
     "url": "https://www.zizhulian.cc",
     "desc": "自助链大全提供自助链接导航网站的收录、展示、推广、广告等。",
     "avatar": "https://favicone.vercel.app/icon?url=https://www.zizhulian.cc",
+    "category": "导航",
     "joinYear": 2026
   },
   {
@@ -196,6 +223,7 @@ window.linksData = [
     "url": "https://jingyuan-zheng.github.io/zh/",
     "desc": "随心分享有趣的技术、开源项目与生活记录。",
     "avatar": "https://jingyuan-zheng.github.io/img/avatar.png",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -203,6 +231,7 @@ window.linksData = [
     "url": "https://www.88dhw.top",
     "desc": "88导航是最新的网址导航程序，自动秒收录，自动审核，收录国内外、各行业优秀网站，旨在为大家提供网站分类目录源码、优秀网站参考、网站推广服务！",
     "avatar": "https://favicone.vercel.app/icon?url=https://www.88dhw.top",
+    "category": "导航",
     "joinYear": 2026
   },
   {
@@ -210,6 +239,7 @@ window.linksData = [
     "url": "https://www.ishana.cn/",
     "desc": "野生笨蛋小猫的个人主页",
     "avatar": "https://favicone.vercel.app/icon?url=https://www.ishana.cn/",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -217,6 +247,7 @@ window.linksData = [
     "url": "https://www.kaaaaai.cn/",
     "desc": "有些安排是多余的 这片空旷对我有益",
     "avatar": "https://favicone.vercel.app/icon?url=https://www.kaaaaai.cn/",
+    "category": "博客",
     "joinYear": 2026
   },
   {
@@ -224,6 +255,7 @@ window.linksData = [
     "url": "http://www.linghuw.cn/",
     "desc": "小笑话分享",
     "avatar": "https://shturl.cc/FWgwQ4onkd6b5kdwwzKgKPeV0GNDky75qfQPOV9iL9zP",
+    "category": "其他",
     "joinYear": 2026
   },
   {
@@ -231,6 +263,7 @@ window.linksData = [
     "url": "https://blog.dao.js.cn/",
     "desc": "李懋和，俗名李栋梁。书法、国画爱好者，互联网安全与前端建设者。",
     "avatar": "https://cn.cravatar.com/avatar/37d41e2b550633a30f5d41de61c1aa92?s=400&r=G&d=mp&ver=1754413756",
+    "category": "博客",
     "joinYear": 2026
   }
 ];
