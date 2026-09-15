@@ -11,7 +11,6 @@
 <meta property="og:image" content="https://frdlink.link/favicon.ico">
 <meta name="theme-color" content="#4080ff">
 <title>FRDLINK</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
 <style>
 :root{
     --bg:#f7f8fa;
@@ -72,13 +71,21 @@ header h1{font-size:28px;margin-bottom:8px;}
 .nav-bar button{
     padding:8px 16px;border:none;border-radius:8px;
     background:var(--accent);color:#fff;cursor:pointer;font-size:15px;
+    display:inline-flex;align-items:center;gap:6px;
 }
 .nav-bar button:hover{background:var(--accent-hover);}
-#themeBtn{width:40px;padding:8px 0;}
+#themeBtn{width:40px;padding:8px 0;justify-content:center;gap:0;}
+.toolbar{display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap;}
 #searchInput{
-    width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;margin-bottom:16px;
+    flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;
     background:var(--input-bg);color:var(--text);
 }
+.offline-btn{
+    padding:10px 16px;font-size:14px;border:1px solid var(--border);border-radius:8px;
+    background:var(--card-bg);color:var(--muted);cursor:pointer;font-family:inherit;white-space:nowrap;
+}
+.offline-btn:hover{border-color:var(--accent);color:var(--accent);}
+.offline-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 #tabsWrap,#catTabsWrap{
     display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;
 }
@@ -116,8 +123,14 @@ header h1{font-size:28px;margin-bottom:8px;}
 .card-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px;}
 .year-mark{font-size:12px;color:var(--muted3);}
 .status-detail{font-size:11px;color:var(--muted3);margin-top:4px;}
+.refresh-btn{
+    margin-left:auto;padding:4px 10px;font-size:12px;border:1px solid var(--border);
+    border-radius:6px;background:transparent;color:var(--muted);cursor:pointer;font-family:inherit;
+    display:inline-flex;align-items:center;justify-content:center;
+}
+.refresh-btn:hover{border-color:var(--accent);color:var(--accent);}
 .copy-btn{
-    margin-left:auto;padding:4px 12px;font-size:12px;border:1px solid var(--border);
+    padding:4px 12px;font-size:12px;border:1px solid var(--border);
     border-radius:6px;background:transparent;color:var(--muted);cursor:pointer;font-family:inherit;
 }
 .copy-btn:hover{border-color:var(--accent);color:var(--accent);}
@@ -140,6 +153,12 @@ header h1{font-size:28px;margin-bottom:8px;}
 .form-msg.ok{color:var(--status-online-text);}
 .form-msg.err{color:var(--status-offline-text);}
 .empty-tip{grid-column:1/-1;color:var(--muted3);text-align:center;padding:40px 0;}
+.hp-wrap{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;}
+.static-list{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.static-list p{margin-bottom:10px;color:var(--muted);}
+.static-list ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;}
+.static-list li{font-size:14px;color:var(--muted2);word-break:break-all;}
+.static-list a{color:var(--accent);text-decoration:none;}
 </style>
 </head>
 <body>
@@ -150,17 +169,62 @@ header h1{font-size:28px;margin-bottom:8px;}
         <span id="editTime"></span>
     </div>
     <div class="nav-bar">
-        <button class="btn-home"><i class="fa fa-home"></i> 首页</button>
-        <button class="btn-apply"><i class="fa fa-paper-plane"></i> 申请友链</button>
-        <button id="themeBtn" title="切换明暗模式"><i class="fa fa-moon"></i></button>
+        <button class="btn-home"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></svg> 首页</button>
+        <button class="btn-apply"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> 申请友链</button>
+        <button class="btn-copyall" title="复制全部友链 Markdown 列表"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制全部</button>
+        <button id="themeBtn" title="切换明暗模式"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
     </div>
 </header>
 
 <section id="home-section">
-    <input id="searchInput" placeholder="搜索站点名称、网址、简介...">
+    <div class="toolbar">
+        <input id="searchInput" placeholder="搜索站点名称、网址、简介...">
+        <button id="offlineBtn" class="offline-btn" type="button">只看失联</button>
+    </div>
     <div id="catTabsWrap" aria-label="按分类筛选"></div>
     <div id="tabsWrap" aria-label="按年份筛选"></div>
-    <div id="linksContainer"></div>
+    <div id="linksContainer">
+<noscript>
+            <div class="static-list">
+                <p>本站友链列表（共 33 条，启用 JavaScript 可查看在线状态、搜索与筛选）：</p>
+                <ul>
+                <li><a href="https://dusays.com" rel="noopener noreferrer">杜老师说</a> — 杜老师说</li>
+                <li><a href="https://blog.zhheo.com/" rel="noopener noreferrer">Heo</a> — 设计师</li>
+                <li><a href="https://haozhan.wang/" rel="noopener noreferrer">好站网</a> — 发现好站，展示好站</li>
+                <li><a href="https://wuqishi.com" rel="noopener noreferrer">蛋蛋之家</a> — 一枚蛋蛋的自留地</li>
+                <li><a href="https://www.zhyok.cn/" rel="noopener noreferrer">秋記Autumn</a> — 80后个人博客、网络日杂、生活记录。</li>
+                <li><a href="https://www.wanghao.me/" rel="noopener noreferrer">小王子</a> — 聆听小王子，守望成长，静待花开。</li>
+                <li><a href="https://xingwangzhe.fun/" rel="noopener noreferrer">姓王者</a> — 姓王者的博客</li>
+                <li><a href="https://gb.frdlink.link" rel="noopener noreferrer">FRDLINK留言板</a> — 说你想说的话，做你想做的事。</li>
+                <li><a href="https://blog.yiyou.bj.cn" rel="noopener noreferrer">益友网站</a> — 记生活点滴，留岁月温柔。</li>
+                <li><a href="https://wang618.cn/" rel="noopener noreferrer">旺东自留地</a> — 爱生活、爱摸鱼</li>
+                <li><a href="https://blog.frdlink.link/" rel="noopener noreferrer">FRDLINK博客</a> — 一个简单的个人博客</li>
+                <li><a href="https://etom.top" rel="noopener noreferrer">浮生事</a> — 无根之言，只当笑谈。</li>
+                <li><a href="https://www.pipishe.com" rel="noopener noreferrer">皮皮社</a> — 皮一下～很开心！</li>
+                <li><a href="https://www.dalao.net" rel="noopener noreferrer">大佬论坛</a> — 大佬论坛</li>
+                <li><a href="https://www.ruanyifeng.com/blog/" rel="noopener noreferrer">阮一峰</a> — 阮一峰的网络日志</li>
+                <li><a href="https://ihello.cc" rel="noopener noreferrer">星辰角落</a> — 记录生活点滴</li>
+                <li><a href="https://www.aifiee.cn/" rel="noopener noreferrer">Fiee&#039;s BLog</a> — 长风破浪会有时，直挂云帆济沧海</li>
+                <li><a href="https://3gw.cn/a.php?o=ZZZ" rel="noopener noreferrer">3G导航网</a> — 3G导航</li>
+                <li><a href="https://www.188dh.cn/" rel="noopener noreferrer">188收录网</a> — 188收录网</li>
+                <li><a href="https://prain.cn/" rel="noopener noreferrer">清雨博客</a> — 一个极为干净的开源PHP轻博客程序，比一张图片还小，不到150K，不需要数据库，无任何依赖，冰清玉洁，纤尘不染</li>
+                <li><a href="https://wanqingcheng.cn" rel="noopener noreferrer">一望成欢🍀</a> — 一望成欢🍀记录烟火，珍藏热爱</li>
+                <li><a href="https://blog.weasel6.cn/" rel="noopener noreferrer">黄鼠狼的树洞</a> — 小黄的博客，记录生活中的美好</li>
+                <li><a href="https://blog.yuumii.top" rel="noopener noreferrer">雨眠碎碎念</a> — 愿君安康~</li>
+                <li><a href="https://www.mysticstars.cn/" rel="noopener noreferrer">Mystic Stars</a> — Discover Infinity</li>
+                <li><a href="https://blogroll.online/" rel="noopener noreferrer">中文独立博客聚合列表</a> — 又一个博客聚合站</li>
+                <li><a href="http://www.heatsystem.cn/" rel="noopener noreferrer">友情网址导航</a> — 友情网址导航</li>
+                <li><a href="https://www.zizhulian.cc" rel="noopener noreferrer">自助链大全</a> — 自助链大全提供自助链接导航网站的收录、展示、推广、广告等。</li>
+                <li><a href="https://jingyuan-zheng.github.io/zh/" rel="noopener noreferrer">小景</a> — 随心分享有趣的技术、开源项目与生活记录。</li>
+                <li><a href="https://www.88dhw.top" rel="noopener noreferrer">88导航网-网站收录-网址收录-网址导航-收录网站-自助广告系统</a> — 88导航是最新的网址导航程序，自动秒收录，自动审核，收录国内外、各行业优秀网站，旨在为大家提供网站分类目录源码、优秀网站参考、网站推广服务！</li>
+                <li><a href="https://www.ishana.cn/" rel="noopener noreferrer">Ethan的避风港</a> — 野生笨蛋小猫的个人主页</li>
+                <li><a href="https://www.kaaaaai.cn/" rel="noopener noreferrer">壹拾肆</a> — 有些安排是多余的 这片空旷对我有益</li>
+                <li><a href="http://www.linghuw.cn/" rel="noopener noreferrer">灵狐笑话</a> — 小笑话分享</li>
+                <li><a href="https://blog.dao.js.cn/" rel="noopener noreferrer">懋和道人</a> — 李懋和，俗名李栋梁。书法、国画爱好者，互联网安全与前端建设者。</li>
+                </ul>
+            </div>
+        </noscript>
+    </div>
 </section>
 
 <section id="apply-section" class="hide">
@@ -180,6 +244,10 @@ header h1{font-size:28px;margin-bottom:8px;}
         <div class="form-item">
             <label>站点头像URL</label>
             <input id="siteAvatar" placeholder="https://xxx/favicon.ico">
+        </div>
+        <div class="form-item hp-wrap" aria-hidden="true">
+            <label>网站</label>
+            <input id="hpField" tabindex="-1" autocomplete="off">
         </div>
         <div class="form-item">
             <label>你的联系邮箱</label>
@@ -208,6 +276,10 @@ const STATUS_CACHE_TTL = 20 * 60 * 1000;
 const CACHE_KEY = "link_status_cache";
 // 头像加载失败的兜底占位图（内联 SVG，无外部依赖）
 const FALLBACK_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23e9edf4'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='%23888'%3E?%3C/text%3E%3C/svg%3E";
+// 内联图标（不依赖外部图标字体，任何网络环境都能正常显示）
+const ICON_MOON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+const ICON_SUN = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+const ICON_REFRESH = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
 
 const homeSection = document.getElementById('home-section');
 const applySection = document.getElementById('apply-section');
@@ -220,8 +292,8 @@ const editTimeEl = document.getElementById('editTime');
 
 let renderVersion = 0;
 let imgObserver = null;
-// 当前筛选状态：分类 / 年份 / 关键词
-const filterState = { cat: 'all', year: 'all', keyword: '' };
+// 当前筛选状态：分类 / 年份 / 关键词 / 只看失联
+const filterState = { cat: 'all', year: 'all', keyword: '', offlineOnly: false };
 
 // 格式化日期 YYYY‑MM‑DD → xxxx年x月x日
 function formatDate(str){
@@ -269,10 +341,9 @@ document.querySelector('.btn-apply').addEventListener('click', e=>{
 
 // ====================== 明暗模式 ======================
 const themeBtn = document.getElementById('themeBtn');
-const themeIcon = themeBtn.querySelector('i');
 function applyTheme(dark){
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    themeIcon.className = dark ? 'fa fa-sun' : 'fa fa-moon';
+    themeBtn.innerHTML = dark ? ICON_SUN : ICON_MOON;
 }
 function initTheme(){
     const saved = localStorage.getItem('link_theme');
@@ -296,11 +367,11 @@ function setStatusCache(cache){
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
 }
 
-async function getSiteStatus(url){
+async function getSiteStatus(url, force){
     const cache = getStatusCache();
     const now = Date.now();
-    if(cache[url] && (now - cache[url].time) < STATUS_CACHE_TTL){
-        return cache[url];
+    if(!force && cache[url] && (now - cache[url].time) < STATUS_CACHE_TTL){
+        return Object.assign({}, cache[url], { fromCache: true });
     }
     const started = performance.now();
     const controller = new AbortController();
@@ -331,11 +402,21 @@ async function getSiteStatus(url){
         clearTimeout(timer);
     }
     setStatusCache(cache);
-    return cache[url];
+    return Object.assign({}, cache[url], { fromCache: false });
 }
 
-async function updateCardStatus(card, url, currentVer){
-    const status = await getSiteStatus(url);
+// 检测结果完成一轮后，让"只看失联"筛选与失联排后实时更新（300ms 防抖，避免频繁重建）
+let refreshTimer = null;
+function scheduleRefresh(){
+    if(refreshTimer) return;
+    refreshTimer = setTimeout(()=>{
+        refreshTimer = null;
+        renderLinks();
+    }, 300);
+}
+
+async function updateCardStatus(card, url, currentVer, force){
+    const status = await getSiteStatus(url, force);
     if(renderVersion !== currentVer) return;
     const statusTag = card.querySelector('.status-tag');
     if(status.alive){
@@ -353,6 +434,9 @@ async function updateCardStatus(card, url, currentVer){
         const t = new Date(status.time);
         const hm = `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
         detail.innerText = (status.ms != null) ? `最近检测 ${hm} · ${status.ms}ms` : `最近检测 ${hm}`;
+    }
+    if(!status.fromCache){
+        scheduleRefresh();
     }
 }
 
@@ -437,13 +521,13 @@ function attachAvatarFallback(imgEl){
 function buildLinkCode(item){
     return `[${item.name}](${item.url})`;
 }
-function copyLink(item, btn){
-    const text = buildLinkCode(item);
+// 通用复制：写入剪贴板，按钮短暂显示"已复制"（兼容无剪贴板 API 的环境）
+function copyText(text, btn){
     const done = ()=>{
-        const old = btn.innerText;
+        const old = btn.innerHTML;
+        btn.disabled = true;
         btn.innerText = "已复制";
-        btn.classList.add('copied');
-        setTimeout(()=>{ btn.innerText = old; btn.classList.remove('copied'); }, 1500);
+        setTimeout(()=>{ btn.innerHTML = old; btn.disabled = false; }, 1500);
     };
     const fallback = ()=>{
         const ta = document.createElement('textarea');
@@ -457,10 +541,24 @@ function copyLink(item, btn){
         document.body.removeChild(ta);
     };
     if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(text).then(done).catch(fallback);
+        // 部分环境下剪贴板 API 可能挂起，800ms 无结果则走兼容回退
+        Promise.race([
+            navigator.clipboard.writeText(text).then(done),
+            new Promise((resolve, reject)=>setTimeout(()=>reject(new Error("clipboard timeout")), 800))
+        ]).catch(fallback);
     }else{
         fallback();
     }
+}
+function copyLink(item, btn){
+    copyText(buildLinkCode(item), btn);
+}
+
+// 状态排序分：在线=0，未检测=1，失联/检测失败=2
+function statusScore(cache, url){
+    const s = cache[url];
+    if(!s) return 1;
+    return s.alive ? 0 : 2;
 }
 
 function renderLinks(){
@@ -481,12 +579,22 @@ function renderLinks(){
             d.desc.toLowerCase().includes(kw)
         )
     }
+    const cache = getStatusCache();
+    if(filterState.offlineOnly){
+        arr = arr.filter(d=>{
+            const s = cache[d.url];
+            return s && !s.alive;
+        });
+    }else{
+        // 失联/检测失败自动排后（稳定排序，未检测的保持原顺序）
+        arr = arr.slice().sort((a,b)=>statusScore(cache,a.url) - statusScore(cache,b.url));
+    }
     linksContainer.innerHTML = '';
 
     if(arr.length === 0){
         const tip = document.createElement('div');
         tip.className = "empty-tip";
-        tip.innerText = "没有找到匹配的友链";
+        tip.innerText = filterState.offlineOnly ? "当前没有失联的友链" : "没有找到匹配的友链";
         linksContainer.appendChild(tip);
         return;
     }
@@ -506,6 +614,7 @@ function renderLinks(){
         <a class="link-url" target="_blank" rel="noopener noreferrer" href="${escapeHtml(item.url)}">${escapeHtml(item.url)}</a>
         <div class="card-footer">
             <span class="year-mark">加入：${item.joinYear} · ${escapeHtml(item.category)}</span>
+            <button type="button" class="refresh-btn" title="重新检测状态">${ICON_REFRESH}</button>
             <button type="button" class="copy-btn">复制友链</button>
         </div>
         <div class="status-detail"></div>
@@ -526,6 +635,14 @@ function renderLinks(){
 
         const copyBtn = card.querySelector('.copy-btn');
         copyBtn.addEventListener('click', ()=>copyLink(item, copyBtn));
+
+        const refreshBtn = card.querySelector('.refresh-btn');
+        refreshBtn.addEventListener('click', ()=>{
+            const tag = card.querySelector('.status-tag');
+            tag.className = "status-tag status-checking";
+            tag.innerText = "检测中";
+            updateCardStatus(card, item.url, renderVersion, true);
+        });
 
         updateCardStatus(card, item.url, currentVer);
     }
@@ -549,6 +666,21 @@ searchInput.addEventListener('input',()=>{
         renderLinks();
     }, 250);
 })
+
+// 只看失联切换
+const offlineBtn = document.getElementById('offlineBtn');
+offlineBtn.addEventListener('click', ()=>{
+    filterState.offlineOnly = !filterState.offlineOnly;
+    offlineBtn.classList.toggle('active', filterState.offlineOnly);
+    offlineBtn.innerText = filterState.offlineOnly ? "只看失联（已开启）" : "只看失联";
+    renderLinks();
+});
+
+// 复制全部友链（Markdown 列表）
+document.querySelector('.btn-copyall').addEventListener('click', ()=>{
+    const text = linksData.map(d=>`[${d.name}](${d.url})`).join('\n');
+    copyText(text, document.querySelector('.btn-copyall'));
+});
 
 // 归一化网址用于查重：去协议、去末尾斜杠、小写
 function normalizeUrl(u){
@@ -576,6 +708,17 @@ document.getElementById('sendMailBtn').addEventListener('click', async ()=>{
         return;
     }
 
+    // 蜜罐防垃圾：隐藏字段被填写则静默丢弃
+    if(document.getElementById('hpField').value.trim()){
+        return;
+    }
+    // 提交间隔限制（30 秒内只能提交一次）
+    const lastSubmit = localStorage.getItem('link_last_submit');
+    if(lastSubmit && (Date.now() - Number(lastSubmit)) < 30000){
+        alert("提交过于频繁，请稍后再试");
+        return;
+    }
+
     // 查重：已在友链列表中的网站不允许重复申请
     const dup = linksData.find(d=>normalizeUrl(d.url) === normalizeUrl(url));
     if(dup){
@@ -585,6 +728,7 @@ document.getElementById('sendMailBtn').addEventListener('click', async ()=>{
 
     // 已配置提交接口：POST（JSON）到后端 / Formspree
     if(SUBMIT_URL){
+        localStorage.setItem('link_last_submit', String(Date.now()));
         btn.disabled = true;
         msg.className = "form-msg";
         msg.style.display = "none";
@@ -628,6 +772,7 @@ document.getElementById('sendMailBtn').addEventListener('click', async ()=>{
 申请人邮箱：${contact}
 
 我方已添加贵站友链，请审核！`;
+    localStorage.setItem('link_last_submit', String(Date.now()));
     const mailto = `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
 })
