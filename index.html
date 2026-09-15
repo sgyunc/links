@@ -36,7 +36,9 @@ header h1{font-size:28px;margin-bottom:8px;}
 }
 .tab-item{
     padding:7px 14px;background:#e9edf4;border-radius:6px;cursor:pointer;font-size:14px;
+    border:none;font-family:inherit;
 }
+.tab-item:focus-visible{outline:2px solid #4080ff;outline-offset:2px;}
 .tab-item.active{background:#4080ff;color:#fff;}
 #linksContainer{
     display:grid;
@@ -59,6 +61,7 @@ header h1{font-size:28px;margin-bottom:8px;}
 .status-checking{background:#f0f0f0;color:#666;}
 .status-online{background:#dcfce7;color:#166534;}
 .status-offline{background:#fee2e2;color:#991b1b;}
+.status-error{background:#fef3c7;color:#92400e;}
 .link-desc{font-size:14px;color:#555;margin-bottom:6px;min-height:40px;}
 .link-url{font-size:13px;color:#4080ff;word-break:break-all;text-decoration:none;display:block;margin-bottom:6px;}
 .year-mark{font-size:12px;color:#888;}
@@ -123,14 +126,19 @@ header h1{font-size:28px;margin-bottom:8px;}
 
 <script src="./links.js"></script>
 <script>
-// ====================== 请务必修改这里 ======================
+// ====================== 站点配置（部署前请核对） ======================
+// 注意：API_KEY 写在静态页面源码中，任何访客都能直接看到并提取，
+// 这是静态站点直连第三方检测接口的固有限制。若该接口有配额或费用，
+// 请务必改为服务端代理转发（前端只调用不含 key 的接口）。
 const API_KEY = "Weas2026Nocss@888";
 const PROXY_API = "https://nocss.xyz/link_checker.php?action=check&key="+API_KEY+"&url=";
-const ADMIN_EMAIL = "your@example.com";
-// =======================================================
+const ADMIN_EMAIL = "your@example.com"; // TODO: 上线前替换为真实收件邮箱，否则申请邮件无法送达
+// ================================================================
 
 const STATUS_CACHE_TTL = 20 * 60 * 1000;
 const CACHE_KEY = "link_status_cache";
+// 头像加载失败的兜底占位图（内联 SVG，无外部依赖）
+const FALLBACK_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23e9edf4'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='%23888'%3E?%3C/text%3E%3C/svg%3E";
 
 const homeSection = document.getElementById('home-section');
 const applySection = document.getElementById('apply-section');
@@ -140,7 +148,6 @@ const searchInput = document.getElementById('searchInput');
 const totalCountEl = document.getElementById('totalCount');
 const editTimeEl = document.getElementById('editTime');
 
-let isRendering = false;
 let renderVersion = 0;
 let imgObserver = null;
 
@@ -166,6 +173,10 @@ function getObserver(){
             entries.forEach(entry=>{
                 if(entry.isIntersecting){
                     const img = entry.target;
+                    img.onerror = ()=>{
+                        img.onerror = null;
+                        img.src = FALLBACK_AVATAR;
+                    };
                     img.src = img.dataset.src;
                     img.removeAttribute('data-src');
                     obs.unobserve(img);
@@ -202,19 +213,30 @@ async function getSiteStatus(url){
     if(cache[url] && (now - cache[url].time) < STATUS_CACHE_TTL){
         return cache[url];
     }
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(), 10000);
     try {
-        const res = await fetch(PROXY_API + encodeURIComponent(url));
+        const res = await fetch(PROXY_API + encodeURIComponent(url), { signal: controller.signal });
+        if(!res.ok) throw new Error("HTTP " + res.status);
         const data = await res.json();
         cache[url] = {
-            alive: data.alive,
+            alive: data.alive === true,
+            error: false,
             time: now
         };
-        setStatusCache(cache);
-        return cache[url];
     }catch(err){
         console.error("检测接口异常", url, err);
-        return { alive:false };
+        // 检测失败也写缓存（同样 TTL），避免刷新后反复请求
+        cache[url] = {
+            alive: false,
+            error: true,
+            time: now
+        };
+    }finally{
+        clearTimeout(timer);
     }
+    setStatusCache(cache);
+    return cache[url];
 }
 
 async function updateCardStatus(card, url, currentVer){
@@ -224,6 +246,9 @@ async function updateCardStatus(card, url, currentVer){
     if(status.alive){
         statusTag.className = "status-tag status-online";
         statusTag.innerText = "在线";
+    }else if(status.error){
+        statusTag.className = "status-tag status-error";
+        statusTag.innerText = "检测失败";
     }else{
         statusTag.className = "status-tag status-offline";
         statusTag.innerText = "失联";
@@ -233,30 +258,57 @@ async function updateCardStatus(card, url, currentVer){
 function initTabs(){
     const years = [...new Set(linksData.map(item=>item.joinYear))].sort((a,b)=>b-a);
     tabsWrap.innerHTML = '';
-    const allTab = document.createElement('div');
-    allTab.className = "tab-item active";
-    allTab.dataset.year = "all";
-    allTab.innerText = "全部";
-    tabsWrap.appendChild(allTab);
+    tabsWrap.setAttribute('role','tablist');
+
+    function makeTab(year, label, active){
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.className = "tab-item" + (active ? " active" : "");
+        tab.dataset.year = year;
+        tab.setAttribute('role','tab');
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        tab.tabIndex = active ? 0 : -1;
+        tab.innerText = label;
+        return tab;
+    }
+
+    const tabs = [makeTab("all", "全部", true)];
     years.forEach(y=>{
-        const tab = document.createElement('div');
-        tab.className = "tab-item";
-        tab.dataset.year = y;
-        tab.innerText = `${y}`;
-        tabsWrap.appendChild(tab);
+        tabs.push(makeTab(String(y), `${y}`, false));
     });
-    tabsWrap.querySelectorAll('.tab-item').forEach(tab=>{
-        tab.addEventListener('click',()=>{
-            tabsWrap.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
-            tab.classList.add('active');
-            renderLinks(tab.dataset.year);
-        })
-    })
+    tabs.forEach(t=>tabsWrap.appendChild(t));
+
+    function selectTab(tab){
+        tabs.forEach(t=>{
+            t.classList.remove('active');
+            t.setAttribute('aria-selected','false');
+            t.tabIndex = -1;
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected','true');
+        tab.tabIndex = 0;
+        renderLinks(tab.dataset.year);
+    }
+
+    tabs.forEach((tab, i)=>{
+        tab.addEventListener('click', ()=>selectTab(tab));
+        tab.addEventListener('keydown', e=>{
+            let next = null;
+            if(e.key === 'ArrowRight' || e.key === 'ArrowDown'){
+                next = tabs[(i + 1) % tabs.length];
+            }else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp'){
+                next = tabs[(i - 1 + tabs.length) % tabs.length];
+            }
+            if(next){
+                e.preventDefault();
+                next.focus();
+                selectTab(next);
+            }
+        });
+    });
 }
 
 function renderLinks(filterYear="all", keyword=""){
-    if(isRendering) return;
-    isRendering = true;
     const currentVer = ++renderVersion;
 
     let arr = linksData;
@@ -275,8 +327,6 @@ function renderLinks(filterYear="all", keyword=""){
     const observer = getObserver();
 
     for(const item of arr){
-        if(currentVer !== renderVersion) break;
-
         const card = document.createElement('div');
         card.className = "link-card";
         card.innerHTML = `
@@ -286,21 +336,27 @@ function renderLinks(filterYear="all", keyword=""){
             <span class="status-tag status-checking">检测中</span>
         </div>
         <div class="link-desc">${escapeHtml(item.desc)}</div>
-        <a class="link-url" target="_blank" href="${escapeHtml(item.url)}">${escapeHtml(item.url)}</a>
+        <a class="link-url" target="_blank" rel="noopener noreferrer" href="${escapeHtml(item.url)}">${escapeHtml(item.url)}</a>
         <div class="year-mark">加入：${item.joinYear}</div>
         `;
         linksContainer.appendChild(card);
 
         const imgEl = card.querySelector('.avatar[data-src]');
+        const loadAvatar = ()=>{
+            imgEl.onerror = ()=>{
+                imgEl.onerror = null;
+                imgEl.src = FALLBACK_AVATAR;
+            };
+            imgEl.src = imgEl.dataset.src;
+            imgEl.removeAttribute('data-src');
+        };
         if(observer){
             observer.observe(imgEl);
         }else{
-            imgEl.src = imgEl.dataset.src;
-            imgEl.removeAttribute('data-src');
+            loadAvatar();
         }
         updateCardStatus(card, item.url, currentVer);
     }
-    isRendering = false;
 }
 
 function escapeHtml(str){
@@ -313,9 +369,13 @@ function escapeHtml(str){
         .replace(/'/g,'&#039;');
 }
 
+let searchTimer = null;
 searchInput.addEventListener('input',()=>{
-    const activeTab = tabsWrap.querySelector('.tab-item.active');
-    renderLinks(activeTab.dataset.year, searchInput.value);
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(()=>{
+        const activeTab = tabsWrap.querySelector('.tab-item.active');
+        renderLinks(activeTab.dataset.year, searchInput.value);
+    }, 250);
 })
 
 document.getElementById('sendMailBtn').addEventListener('click',()=>{
@@ -326,6 +386,18 @@ document.getElementById('sendMailBtn').addEventListener('click',()=>{
     const contact = document.getElementById('contactMail').value.trim();
     if(!name || !url){
         alert("请填写站点名称和网站地址");
+        return;
+    }
+    if(!/^https?:\/\/.+/i.test(url)){
+        alert("网站地址需以 http:// 或 https:// 开头");
+        return;
+    }
+    if(contact && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)){
+        alert("联系邮箱格式不正确");
+        return;
+    }
+    if(ADMIN_EMAIL === "your@example.com"){
+        alert("管理员邮箱尚未配置，请修改 index.html 中的 ADMIN_EMAIL 后使用该功能");
         return;
     }
     const subject = `友链申请 - ${name}`;

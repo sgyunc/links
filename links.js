@@ -41,7 +41,7 @@ window.linksData = [
     "name": "小王子",
     "url": "https://www.wanghao.me/",
     "desc": "聆听小王子，守望成长，静待花开。",
-    "avatar": "https://zhheo.com/img/icon.webp",
+    "avatar": "https://favicone.vercel.app/icon?url=https://www.wanghao.me/",
     "joinYear": 2026
   },
   {
@@ -55,7 +55,7 @@ window.linksData = [
     "name": "FRDLINK留言板",
     "url": "https://gb.frdlink.link",
     "desc": "说你想说的话，做你想做的事。",
-    "avatar": "https://frdlink.link",
+    "avatar": "https://favicone.vercel.app/icon?url=https://frdlink.link",
     "joinYear": 2026
   },
   {
@@ -81,7 +81,7 @@ window.linksData = [
   },
   {
     "name": "浮生事",
-    "url": "http://etom.top",
+    "url": "https://etom.top",
     "desc": "无根之言，只当笑谈。",
     "avatar": "https://etom.top/usr/themes/xaink/assets/images/logo.png",
     "joinYear": 2026
@@ -119,13 +119,6 @@ window.linksData = [
     "url": "https://www.aifiee.cn/",
     "desc": "长风破浪会有时，直挂云帆济沧海",
     "avatar": "https://aifiee-blog.oss-cn-beijing.aliyuncs.com/blog/images/1783698955741_1514.png",
-    "joinYear": 2026
-  },
-  {
-    "name": "黑锋",
-    "url": "http://waphfw.com/a.asp?o=ZZZ",
-    "desc": "黑锋破解联盟-始于2011年,14年专注wap网址导航 Waphfw.Com",
-    "avatar": "https://favicone.vercel.app/icon?url=http://waphfw.com/a.asp?o=ZZZ",
     "joinYear": 2026
   },
   {
@@ -193,9 +186,9 @@ window.linksData = [
   },
   {
     "name": "自助链大全",
-    "url": "http://www.zizhulian.cc",
+    "url": "https://www.zizhulian.cc",
     "desc": "自助链大全提供自助链接导航网站的收录、展示、推广、广告等。",
-    "avatar": "https://favicone.vercel.app/icon?url=http://www.zizhulian.cc",
+    "avatar": "https://favicone.vercel.app/icon?url=https://www.zizhulian.cc",
     "joinYear": 2026
   },
   {
