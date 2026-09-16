@@ -265,11 +265,12 @@ header h1{font-size:28px;margin-bottom:8px;}
 // 这是静态站点直连第三方检测接口的固有限制。若该接口有配额或费用，
 // 请务必改为服务端代理转发（前端只调用不含 key 的接口）。
 const API_KEY = "Weas2026Nocss@888";
-const PROXY_API = "https://nocss.xyz/link_checker.php?action=check&key="+API_KEY+"&url=";
+// 站点在线状态检测接口：GET 请求，返回 JSON 含 alive 字段（true=在线 / false=失联）
+const PROXY_API = "https://api.frdlink.link/links/link_checker.php?action=check&key=" + API_KEY + "&url=";
 const ADMIN_EMAIL = "3012127809@qq.com";
-// 申请提交接口（可选）：填入 Formspree 表单地址（如 https://formspree.io/f/xxxx）或自建后端接口后，
-// 申请将直接 POST（JSON）到该地址，不再依赖访客的邮件客户端；留空则回退为 mailto 方式。
-const SUBMIT_URL = "";
+// 申请提交接口：POST JSON（{name,url,desc,avatar,contact,hp}），返回 {ok:true|false, message:"..."}
+// 已部署在 api.frdlink.link（已开 CORS，静态页可直接跨域提交）；留空 "" 则回退 mailto。
+const SUBMIT_URL = "https://api.frdlink.link/links/submit.php";
 // ================================================================
 
 const STATUS_CACHE_TTL = 20 * 60 * 1000;
@@ -726,8 +727,9 @@ document.getElementById('sendMailBtn').addEventListener('click', async ()=>{
         return;
     }
 
-    // 已配置提交接口：POST（JSON）到后端 / Formspree
-    if(SUBMIT_URL){
+    // 已配置提交接口：POST（JSON）到远程 PHP / Formspree / 同目录接口。
+    // file:// 本地预览时：相对路径接口回退 mailto；完整 http(s) 地址（远程 PHP）仍会尝试调用。
+    if(SUBMIT_URL && (location.protocol !== 'file:' || /^https?:/i.test(SUBMIT_URL))){
         localStorage.setItem('link_last_submit', String(Date.now()));
         btn.disabled = true;
         msg.className = "form-msg";
@@ -736,17 +738,20 @@ document.getElementById('sendMailBtn').addEventListener('click', async ()=>{
             const res = await fetch(SUBMIT_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                body: JSON.stringify({ name, url, desc, avatar, contact })
+                body: JSON.stringify({ name, url, desc, avatar, contact, hp: document.getElementById('hpField').value })
             });
-            if(res.ok){
+            let j = null;
+            try{ j = await res.json(); }catch(e){}
+            if(j && j.ok){
                 msg.className = "form-msg ok";
-                msg.innerText = "申请已提交，感谢！站长审核后会与你联系。";
+                msg.innerText = j.message || "申请已提交，感谢！站长审核后会与你联系。";
                 ['siteName','siteUrl','siteDesc','siteAvatar','contactMail'].forEach(id=>{
                     document.getElementById(id).value = '';
                 });
+                document.getElementById('hpField').value = '';
             }else{
                 msg.className = "form-msg err";
-                msg.innerText = "提交失败（HTTP " + res.status + "），请稍后重试或改用邮件联系。";
+                msg.innerText = (j && j.message) || ("提交失败（HTTP " + res.status + "），请稍后重试或改用邮件联系。");
             }
         }catch(err){
             console.error("申请提交异常", err);
